@@ -7,6 +7,7 @@ package it.polito.tdp.PremierLeague;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import it.polito.tdp.PremierLeague.model.Model;
 import javafx.event.ActionEvent;
@@ -15,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import java.time.*;
 
 public class FXMLController {
 
@@ -39,7 +41,7 @@ public class FXMLController {
     private TextField txtMinuti; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbMese"
-    private ComboBox<?> cmbMese; // Value injected by FXMLLoader
+    private ComboBox<Month> cmbMese; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbM1"
     private ComboBox<?> cmbM1; // Value injected by FXMLLoader
@@ -57,6 +59,13 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	txtResult.clear();
+    	Month m = this.cmbMese.getValue();
+    	int i = m.getValue();
+    	model.creaGrafo(i);
+    	
+//      String s = Integer.toString(i);
+//    	this.txtResult.setText(s);
     	
     }
 
@@ -79,7 +88,8 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
-  
+    	//a. Inserisco mesi al menu' 
+    	this.cmbMese.getItems().addAll(Month.JANUARY, Month.FEBRUARY, Month.MARCH, Month.APRIL, Month.MAY, Month.JUNE, Month.JULY, Month.AUGUST, Month.SEPTEMBER, Month.OCTOBER, Month.NOVEMBER, Month.DECEMBER);  
     }
     
     
