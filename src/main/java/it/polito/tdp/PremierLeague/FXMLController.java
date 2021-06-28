@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.PremierLeague.model.LinkMatches;
 import it.polito.tdp.PremierLeague.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -54,7 +56,12 @@ public class FXMLController {
 
     @FXML
     void doConnessioneMassima(ActionEvent event) {
-    	
+    	txtResult.clear();
+    	List<LinkMatches> result = new ArrayList<>();
+    	result = this.model.connMax();
+    	this.txtResult.setText("Coppie con connessione massima: \n\n");
+    	for(LinkMatches l: result)
+    		this.txtResult.appendText(l.toString()+"\n");
     }
 
     @FXML
@@ -67,10 +74,7 @@ public class FXMLController {
 		txtResult.appendText("GRAFO CREATO\n");
 		txtResult.appendText("# VERTICI: " + this.model.nVertici() + "\n");
 		txtResult.appendText("# ARCHI: " + this.model.nArchi() + "\n");
-    	
-//      String s = Integer.toString(i);
-//    	this.txtResult.setText(s);
-    	
+		this.btnConnessioneMassima.setDisable(false);
     }
 
     @FXML
@@ -93,7 +97,8 @@ public class FXMLController {
     public void setModel(Model model) {
     	this.model = model;
     	//a. Inserisco mesi al menu' 
-    	this.cmbMese.getItems().addAll(Month.JANUARY, Month.FEBRUARY, Month.MARCH, Month.APRIL, Month.MAY, Month.JUNE, Month.JULY, Month.AUGUST, Month.SEPTEMBER, Month.OCTOBER, Month.NOVEMBER, Month.DECEMBER);  
+    	this.cmbMese.getItems().addAll(Month.JANUARY, Month.FEBRUARY, Month.MARCH, Month.APRIL, Month.MAY, Month.JUNE, Month.JULY, Month.AUGUST, Month.SEPTEMBER, Month.OCTOBER, Month.NOVEMBER, Month.DECEMBER); 
+    	this.btnConnessioneMassima.setDisable(true);
     }
     
     

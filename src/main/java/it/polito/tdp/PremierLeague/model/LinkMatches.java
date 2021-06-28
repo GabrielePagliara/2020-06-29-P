@@ -2,6 +2,11 @@ package it.polito.tdp.PremierLeague.model;
 
 public class LinkMatches {
 	
+	@Override
+	public String toString() {
+		return "" + m1 + ", " + m2 + ", peso=" + peso + ".";
+	}
+
 	private Match m1;
 	private Match m2;
 	private Integer peso;

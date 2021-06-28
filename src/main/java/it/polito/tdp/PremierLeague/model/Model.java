@@ -15,11 +15,13 @@ import it.polito.tdp.PremierLeague.db.PremierLeagueDAO;
 public class Model {
 	
 	private SimpleWeightedGraph<Match, DefaultWeightedEdge> grafo;
-	private List<Match> vertici;	
+	//private List<Match> vertici;	
 	private Map<Integer, Match> idMap;
+	
 	
 	//dao
 	private PremierLeagueDAO dao;
+	
 	
 	public Model() {
 		dao = new PremierLeagueDAO();
@@ -35,7 +37,7 @@ public class Model {
 		
 		//aggiungo gli archi
 		for(LinkMatches l: dao.getLink(min, idMap, mese)) {
-			Graphs.addEdgeWithVertices(this.grafo, l.getM1() , l.getM2(), l.getPeso());			
+				Graphs.addEdgeWithVertices(this.grafo, l.getM1() , l.getM2(), l.getPeso());			
 		}	
 	}
 	
@@ -45,6 +47,28 @@ public class Model {
 	
 	public int nArchi() {
 		return this.grafo.edgeSet().size();
+	}
+
+	public List<LinkMatches> connMax() {
+		if (grafo == null) {
+			return null;
+		}
+	    List<LinkMatches> best = new ArrayList<>();
+		Integer max = Integer.MIN_VALUE;
+
+	
+			for (DefaultWeightedEdge e : this.grafo.edgeSet()) {
+				if (this.grafo.getEdgeWeight(e) > max) {
+					best.clear();
+					max = (int) grafo.getEdgeWeight(e);
+					best.add(new LinkMatches(grafo.getEdgeSource(e), grafo.getEdgeTarget(e), (int) grafo.getEdgeWeight(e)));
+				} else if (this.grafo.getEdgeWeight(e) == max) {
+					best.add(new LinkMatches(grafo.getEdgeSource(e), grafo.getEdgeTarget(e),
+							(int) grafo.getEdgeWeight(e)));
+				}
+			}
+		
+		return best;
 	}
 	
 	
