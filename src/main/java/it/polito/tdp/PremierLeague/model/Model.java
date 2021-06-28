@@ -27,23 +27,24 @@ public class Model {
 		dao.listAllMatches(idMap);
 	}
 	
-	public String creaGrafo(Integer mese) {
+	public void creaGrafo(Integer mese, Integer min) {
 		this.grafo = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 		
 		// aggiungo vertici, filtrati
 		Graphs.addAllVertices(grafo, dao.getMatchesOfMounth(mese, idMap));
 		
 		//aggiungo gli archi
-		
-		
-
-
-		
-		
-		
-		
-		
-		return null;		
+		for(LinkMatches l: dao.getLink(min, idMap, mese)) {
+			Graphs.addEdgeWithVertices(this.grafo, l.getM1() , l.getM2(), l.getPeso());			
+		}	
+	}
+	
+	public int nVertici() {
+		return this.grafo.vertexSet().size();		
+	}
+	
+	public int nArchi() {
+		return this.grafo.edgeSet().size();
 	}
 	
 	

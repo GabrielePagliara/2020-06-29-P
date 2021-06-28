@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import it.polito.tdp.PremierLeague.model.Action;
+import it.polito.tdp.PremierLeague.model.LinkMatches;
 import it.polito.tdp.PremierLeague.model.Match;
 import it.polito.tdp.PremierLeague.model.Player;
 
@@ -103,6 +104,35 @@ public class PremierLeagueDAO {
 				if (idMap.containsKey(res.getInt("MatchID"))) {
 					result.add(idMap.get(res.getInt("MatchID")));
 				}
+			}
+			conn.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Errore connessione al database");
+			throw new RuntimeException("Error Connection Database");
+		}
+	}
+
+	public List<LinkMatches> getLink(Integer min, Map<Integer, Match> idMap, Integer mese) {
+		String sql = "SELECT a1.MatchID AS m1, a2.MatchID AS m2, COUNT(distinct a1.PlayerID) AS peso "
+				+ "FROM actions a1, actions a2, matches m1, matches m2 " + "WHERE a1.PlayerID = a2.PlayerID "
+				+ "AND a1.MatchID > a2.MatchID " + "AND a1.TimePlayed >= ? " + "AND a2.TimePlayed >= ? "
+				+ "AND m1.MatchID=a1.MatchID " + "AND m2.MatchID=a2.MatchID "
+				+ "AND MONTH(m1.Date) = ? AND MONTH(m2.Date) = ? " + "GROUP BY m1, m2 ";
+		List<LinkMatches> result = new ArrayList<>();
+		Connection conn = DBConnect.getConnection();
+		try {
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, min);
+			st.setInt(2, min);
+			st.setInt(3, mese);
+			st.setInt(4, mese);
+			ResultSet res = st.executeQuery();
+			while (res.next()) {
+				if (idMap.containsKey(res.getInt("m1")))
+					result.add(new LinkMatches(idMap.get(res.getInt("m1")), idMap.get(res.getInt("m2")),
+							res.getInt("peso")));				
 			}
 			conn.close();
 			return result;

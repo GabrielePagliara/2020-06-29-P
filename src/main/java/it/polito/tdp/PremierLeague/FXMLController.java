@@ -61,8 +61,12 @@ public class FXMLController {
     void doCreaGrafo(ActionEvent event) {
     	txtResult.clear();
     	Month m = this.cmbMese.getValue();
-    	int i = m.getValue();
-    	model.creaGrafo(i);
+    	int mese = m.getValue();
+    	int min = Integer.parseInt(txtMinuti.getText());
+    	this.model.creaGrafo(mese, min);
+		txtResult.appendText("GRAFO CREATO\n");
+		txtResult.appendText("# VERTICI: " + this.model.nVertici() + "\n");
+		txtResult.appendText("# ARCHI: " + this.model.nArchi() + "\n");
     	
 //      String s = Integer.toString(i);
 //    	this.txtResult.setText(s);
